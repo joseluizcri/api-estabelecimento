@@ -1,7 +1,6 @@
 package br.com.jrsistemas.apiestabelecimento.service;
 
 import br.com.jrsistemas.apiestabelecimento.model.Conta;
-import br.com.jrsistemas.apiestabelecimento.model.Despesa;
 import br.com.jrsistemas.apiestabelecimento.repository.ContaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +15,10 @@ public class ContaService {
 
     public List<Conta> findAll() {
         return contaRepository.findAll();
+    }
+
+    public Conta findOne(Long id) {
+        return contaRepository.findById(id).orElse(null);
     }
 
     public Conta createNewConta(Conta conta, Double saldoInicial) {
