@@ -2,7 +2,7 @@ package br.com.jrsistemas.apiestabelecimento.dto;
 
 import br.com.jrsistemas.apiestabelecimento.enums.TipoLancamento;
 import br.com.jrsistemas.apiestabelecimento.enums.TipoParcelamento;
-import br.com.jrsistemas.apiestabelecimento.model.Conta;
+import br.com.jrsistemas.apiestabelecimento.model.Lancamento;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -19,13 +19,33 @@ public class LancamentoDto {
     private Boolean contaFixa;
     private LocalDate dataVencimento;
     private CategoriaDto categoria;
-    private Conta conta;
+    private ContaDto conta;
     private TipoParcelamento tipoParcelamento;
     private TipoLancamento tipoLancamento;
     private PessoaDto pessoa;
     private Boolean realizado;
     private Integer parcela;
     private LancamentoDto pai;
+
+
+    public static LancamentoDto toRepresentation(Lancamento lancamento) {
+        return DtoBuilder.create()
+                .id(lancamento.getId())
+                .descricao(lancamento.getDescricao())
+                .valor(lancamento.getValor())
+                .parcelas(lancamento.getParcelas())
+                .contaFixa(lancamento.getContaFixa())
+                .dataVencimento(lancamento.getDataVencimento())
+                .categoria(null)
+                .conta(ContaDto.toRepresentation(lancamento.getConta()))
+                .tipoParcelamento(lancamento.getTipoParcelamento())
+                .tipoLancamento(lancamento.getTipoLancamento())
+                .pessoa(null)
+                .realizado(lancamento.getRealizado())
+                .parcela(lancamento.getParcela())
+                .pai(lancamento.getPai() != null ? toRepresentation(lancamento.getPai()):null)
+                .build();
+    }
 
     public static class DtoBuilder {
 
@@ -73,7 +93,7 @@ public class LancamentoDto {
             dto.categoria = categoria;
             return this;
         }
-        public DtoBuilder conta(Conta conta) {
+        public DtoBuilder conta(ContaDto conta) {
             dto.conta = conta;
             return this;
         }

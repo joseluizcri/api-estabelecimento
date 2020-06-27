@@ -1,5 +1,6 @@
 package br.com.jrsistemas.apiestabelecimento.controller;
 
+import br.com.jrsistemas.apiestabelecimento.dto.LancamentoDto;
 import br.com.jrsistemas.apiestabelecimento.enums.TipoLancamento;
 import br.com.jrsistemas.apiestabelecimento.model.Lancamento;
 import br.com.jrsistemas.apiestabelecimento.service.LancamentoService;
@@ -10,8 +11,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
-import static org.springframework.format.annotation.DateTimeFormat.*;
 import static org.springframework.format.annotation.DateTimeFormat.ISO.DATE;
 
 @RestController
@@ -27,9 +28,11 @@ public class LancamentoController {
     }
 
     @GetMapping("periodo")
-    public ResponseEntity<List<Lancamento>> listarTodos(@RequestParam @DateTimeFormat(iso = DATE) LocalDate dataInicial,
-                                                               @RequestParam @DateTimeFormat(iso = DATE) LocalDate dataFinal) {
-        return ResponseEntity.ok(lancamentoService.findByPeriodo(dataInicial, dataFinal));
+    public ResponseEntity<List<LancamentoDto>> listarTodos(@RequestParam @DateTimeFormat(iso = DATE) LocalDate dataInicial,
+                                                           @RequestParam @DateTimeFormat(iso = DATE) LocalDate dataFinal) {
+        List<Lancamento> lancamentos = lancamentoService.findByPeriodo(dataInicial, dataFinal);
+        List<LancamentoDto> result = lancamentos.stream().map(LancamentoDto::toRepresentation).collect(Collectors.toList());
+        return ResponseEntity.ok(result);
     }
 
     @PostMapping("receita")
