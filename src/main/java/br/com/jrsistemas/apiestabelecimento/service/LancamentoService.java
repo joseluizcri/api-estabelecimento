@@ -26,7 +26,7 @@ public class LancamentoService {
     }
 
     public List<Lancamento> save(Lancamento lancamento) {
-        if (lancamento.getParcelas() != null) {
+        if (lancamento.getParcelas() != null && lancamento.getParcelas() > 1) {
             List<Lancamento> lancamentosPacelados = new ArrayList<>();
             lancamento.setParcela(1);
             for(int cont = 1; cont < lancamento.getParcelas();) {
@@ -43,6 +43,8 @@ public class LancamentoService {
             }
             return lancamentoRepository.saveAll(lancamentosPacelados);
         }
+        lancamento.setParcelas(1);
+        lancamento.setParcela(1);
         return Arrays.asList(lancamentoRepository.save(lancamento));
     }
 }
