@@ -2,9 +2,11 @@ package br.com.jrsistemas.apiestabelecimento.controller;
 
 import br.com.jrsistemas.apiestabelecimento.dto.LancamentoDto;
 import br.com.jrsistemas.apiestabelecimento.enums.TipoLancamento;
-import br.com.jrsistemas.apiestabelecimento.model.Lancamento;
 import br.com.jrsistemas.apiestabelecimento.service.LancamentoService;
+import br.com.jrsistemas.apiestabelecimento.models.Lancamento;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,23 +30,25 @@ public class LancamentoController {
     }
 
     @GetMapping("periodo")
-    public ResponseEntity<List<LancamentoDto>> listarTodos(@RequestParam @DateTimeFormat(iso = DATE) LocalDate dataInicial,
-                                                           @RequestParam @DateTimeFormat(iso = DATE) LocalDate dataFinal) {
-        List<Lancamento> lancamentos = lancamentoService.findByPeriodo(dataInicial, dataFinal);
-        List<LancamentoDto> result = lancamentos.stream().map(LancamentoDto::toRepresentation).collect(Collectors.toList());
-        return ResponseEntity.ok(result);
+    public ResponseEntity<Page<LancamentoDto>> listarTodos(@RequestParam @DateTimeFormat(iso = DATE) LocalDate dataInicial,
+                                                           @RequestParam @DateTimeFormat(iso = DATE) LocalDate dataFinal,
+                                                           Pageable pageable) {
+        Page<LancamentoDto> lancamentos = lancamentoService.findByPeriodo(dataInicial, dataFinal, pageable).map(LancamentoDto::toRepresentation);
+        return ResponseEntity.ok(lancamentos);
     }
 
     @PostMapping("receita")
-    public ResponseEntity<List<Lancamento>> inserirReceita(@RequestBody Lancamento lancamento) {
+    public ResponseEntity<List<LancamentoDto>> inserirReceita(@RequestBody Lancamento lancamento) {
         lancamento.setTipoLancamento(TipoLancamento.RECEITA);
-        return ResponseEntity.ok(lancamentoService.save(lancamento));
+        List<LancamentoDto> result = lancamentoService.save(lancamento).stream().map(LancamentoDto::toRepresentation).collect(Collectors.toList());
+        return ResponseEntity.ok(result);
     }
 
     @PostMapping("despesa")
-    public ResponseEntity<List<Lancamento>> inserirDespesa(@RequestBody Lancamento lancamento) {
+    public ResponseEntity<List<LancamentoDto>> inserirDespesa(@RequestBody Lancamento lancamento) {
         lancamento.setTipoLancamento(TipoLancamento.DESPESA);
-        return ResponseEntity.ok(lancamentoService.save(lancamento));
+        List<LancamentoDto> result = lancamentoService.save(lancamento).stream().map(LancamentoDto::toRepresentation).collect(Collectors.toList());
+        return ResponseEntity.ok(result);
     }
 
 }

@@ -1,9 +1,8 @@
-package br.com.jrsistemas.apiestabelecimento.model;
+package br.com.jrsistemas.apiestabelecimento.models;
 
 import br.com.jrsistemas.apiestabelecimento.enums.TipoLancamento;
 import br.com.jrsistemas.apiestabelecimento.enums.TipoParcelamento;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -12,6 +11,9 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @Entity
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Lancamento implements Serializable {
 
     @Id
@@ -36,20 +38,20 @@ public class Lancamento implements Serializable {
     private Lancamento pai;
 
     public static Lancamento copy(Lancamento other) {
-        Lancamento lancamento = new Lancamento();
-        lancamento.setId(other.id);
-        lancamento.setDescricao(other.descricao);
-        lancamento.setValor(other.valor);
-        lancamento.setParcelas(other.parcelas);
-        lancamento.setContaFixa(other.contaFixa);
-        lancamento.setDataVencimento(other.dataVencimento);
-        lancamento.setCategoria(other.categoria);
-        lancamento.setConta(other.conta);
-        lancamento.setTipoParcelamento(other.tipoParcelamento);
-        lancamento.setTipoLancamento(other.tipoLancamento);
-        lancamento.setPessoa(other.pessoa);
-        lancamento.setRealizado(other.realizado);
-        lancamento.setPai(other.pai);
-        return lancamento;
+        return Lancamento.builder()
+                .id(other.id)
+                .descricao(other.descricao)
+                .valor(other.valor)
+                .parcelas(other.parcelas)
+                .contaFixa(other.contaFixa)
+                .dataVencimento(other.dataVencimento)
+                .categoria(other.categoria)
+                .conta(other.conta)
+                .tipoParcelamento(other.tipoParcelamento)
+                .tipoLancamento(other.tipoLancamento)
+                .pessoa(other.pessoa)
+                .realizado(other.realizado)
+                .pai(other.pai)
+                .build();
     }
 }

@@ -1,14 +1,16 @@
 package br.com.jrsistemas.apiestabelecimento.service;
 
 import br.com.jrsistemas.apiestabelecimento.enums.TipoParcelamento;
-import br.com.jrsistemas.apiestabelecimento.model.Lancamento;
+import br.com.jrsistemas.apiestabelecimento.models.Lancamento;
 import br.com.jrsistemas.apiestabelecimento.repository.LancamentoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -21,8 +23,8 @@ public class LancamentoService {
         return lancamentoRepository.findAll();
     }
 
-    public List<Lancamento> findByPeriodo(LocalDate dataInicial, LocalDate dataFinal) {
-        return lancamentoRepository.findByDataVencimentoGreaterThanEqualAndDataVencimentoLessThanEqual(dataInicial, dataFinal);
+    public Page<Lancamento> findByPeriodo(LocalDate dataInicial, LocalDate dataFinal, Pageable pageable) {
+        return lancamentoRepository.findByDataVencimentoGreaterThanEqualAndDataVencimentoLessThanEqual(dataInicial, dataFinal, pageable);
     }
 
     public List<Lancamento> save(Lancamento lancamento) {
@@ -45,6 +47,6 @@ public class LancamentoService {
         }
         lancamento.setParcelas(1);
         lancamento.setParcela(1);
-        return Arrays.asList(lancamentoRepository.save(lancamento));
+        return Collections.singletonList(lancamentoRepository.save(lancamento));
     }
 }

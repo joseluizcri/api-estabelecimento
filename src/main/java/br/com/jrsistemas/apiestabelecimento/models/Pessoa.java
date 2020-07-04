@@ -1,6 +1,8 @@
-package br.com.jrsistemas.apiestabelecimento.model;
+package br.com.jrsistemas.apiestabelecimento.models;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.Entity;
@@ -9,13 +11,16 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.io.Serializable;
 
-@Entity
+
 @Getter
 @Setter
-public class Categoria implements Serializable {
+@Entity
+@AllArgsConstructor
+@NoArgsConstructor
+public class Pessoa implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String descricao;
+    private String nome;
 }

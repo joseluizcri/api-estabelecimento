@@ -1,11 +1,12 @@
 package br.com.jrsistemas.apiestabelecimento.repository;
 
-import br.com.jrsistemas.apiestabelecimento.model.Lancamento;
+import br.com.jrsistemas.apiestabelecimento.models.Lancamento;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.LocalDate;
-import java.util.List;
 
 public interface LancamentoRepository extends JpaRepository<Lancamento, Long> {
-    List<Lancamento> findByDataVencimentoGreaterThanEqualAndDataVencimentoLessThanEqual(LocalDate dataInicial, LocalDate dataFinal);
+    Page<Lancamento> findByDataVencimentoGreaterThanEqualAndDataVencimentoLessThanEqual(LocalDate dataInicial, LocalDate dataFinal, Pageable pageable);
 }
